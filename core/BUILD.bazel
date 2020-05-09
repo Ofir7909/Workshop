@@ -1,5 +1,7 @@
 cc_binary(
     name = "workshop",
     srcs = ["main.cpp"],
-    #deps = [],
+    deps = [
+        "//thirdparty:glfw",
+    ],
 )
