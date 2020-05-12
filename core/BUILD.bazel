@@ -3,5 +3,6 @@ cc_binary(
     srcs = ["main.cpp"],
     deps = [
         "//thirdparty:glfw",
+        "//thirdparty:glad",
     ],
 )
