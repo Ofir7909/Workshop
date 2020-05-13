@@ -148,3 +148,37 @@ cc_library(
     strip_include_prefix = "",
     visibility = ["//visibility:public"],
 )
+
+###
+### IMGUI
+###
+
+cc_library(
+    name = "imgui",
+    srcs = [
+        "imgui/imgui.cpp",
+        "imgui/imgui.h",
+        "imgui/imgui_demo.cpp",
+        "imgui/imgui_draw.cpp",
+        "imgui/imgui_widgets.cpp",
+        "imgui/imgui_internal.h",
+
+        "imgui/examples/imgui_impl_glfw.h",
+        "imgui/examples/imgui_impl_glfw.cpp",
+        "imgui/examples/imgui_impl_opengl3.h",
+        "imgui/examples/imgui_impl_opengl3.cpp",
+
+        "imgui/imstb_textedit.h",
+        "imgui/imstb_rectpack.h",
+        "imgui/imstb_truetype.h",
+        ],
+    hdrs = ["imgui/imgui.h"],
+    includes = [
+        "imgui/",
+        "imgui/examples/"],
+    deps = [
+        ":glad",
+        ":glfw",
+        ],
+    visibility = ["//visibility:public"],
+)

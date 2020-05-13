@@ -4,5 +4,6 @@ cc_binary(
     deps = [
         "//thirdparty:glfw",
         "//thirdparty:glad",
+        "//thirdparty:imgui",
     ],
 )
