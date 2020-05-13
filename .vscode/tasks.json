@@ -1,0 +1,31 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build with bazel",
+			"type": "shell",
+			"command": "bazel.exe",
+			"args": [
+				"build",
+				"//core:workshop",
+				"--verbose_failures"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "clean bazel",
+			"type": "shell",
+			"command": "bazel.exe",
+			"args": [
+				"clean"
+			],
+			"problemMatcher": []
+		}
+	]
+}
