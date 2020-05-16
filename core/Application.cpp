@@ -49,11 +49,7 @@ Application::Application(char* name)
 
 	// Set up the UI
 	m_UIManager = std::make_unique<UIManager>(m_Window);
-	m_UIManager->AddWindow(new DockspaceWindow());
-	m_UIManager->AddWindow(new DemoWindow());
-	m_UIManager->AddWindow(new DemoWindow());
-	m_UIManager->AddWindow(new DemoWindow());
-	m_UIManager->AddWindow(new DemoWindow());
+	m_UIManager->AddWindow(new DockspaceWindow()); // the Dockspace has to be the first window!
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {
