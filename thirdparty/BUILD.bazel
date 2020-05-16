@@ -182,3 +182,19 @@ cc_library(
         ],
     visibility = ["//visibility:public"],
 )
+
+###
+### ImNodes
+###
+
+cc_library(
+    name = "imnodes",
+    srcs = [
+        "imnodes/imnodes.h",
+        "imnodes/imnodes.cpp",
+    ],
+    hdrs = ["imnodes/imnodes.h"],
+    includes = ["imnodes/"],
+    deps = [":imgui"],
+    visibility = ["//visibility:public"],
+)
