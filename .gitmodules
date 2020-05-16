@@ -5,3 +5,6 @@
 	path = thirdparty/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "thirdparty/imnodes"]
+	path = thirdparty/imnodes
+	url = https://github.com/Nelarius/imnodes.git
