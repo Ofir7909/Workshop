@@ -6,6 +6,11 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <UI/DemoWindow.h>
+#include <UI/DockspaceWindow.h>
+
+namespace workshop
+{
 // glfw error callback
 void GLFWErrorCallback(int error, const char* description)
 {
@@ -19,8 +24,6 @@ void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenu
 			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type, severity, message);
 }
 
-namespace workshop
-{
 Application::Application(char* name)
 {
 	// Init GLFW
@@ -44,7 +47,13 @@ Application::Application(char* name)
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(OpenGLErrorCallback, 0);
 
+	// Set up the UI
 	m_UIManager = std::make_unique<UIManager>(m_Window);
+	m_UIManager->AddWindow(new DockspaceWindow());
+	m_UIManager->AddWindow(new DemoWindow());
+	m_UIManager->AddWindow(new DemoWindow());
+	m_UIManager->AddWindow(new DemoWindow());
+	m_UIManager->AddWindow(new DemoWindow());
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {

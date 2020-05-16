@@ -5,8 +5,11 @@ cc_binary(
         "Main.cpp",
         "Application.h",
         "Application.cpp",
-        "UI.h",
-        "UI.cpp",
+        "UI/UIManager.h",
+        "UI/UIManager.cpp",
+        "UI/UIWindow.h",
+        "UI/DemoWindow.h",
+        "UI/DockspaceWindow.h",
         ],
     deps = [
         "//thirdparty:glfw",
@@ -18,4 +21,5 @@ cc_binary(
         "WIDTH=1280",
         "HEIGHT=720",
     ],
+    includes = ["./"],
 )

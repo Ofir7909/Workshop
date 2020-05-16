@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "UI.h"
+#include "UI/UIManager.h"
 
 #ifndef WIDTH
 #define WIDTH 800
