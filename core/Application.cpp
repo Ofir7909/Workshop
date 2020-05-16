@@ -6,11 +6,18 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+// glfw error callback
+void GLFWErrorCallback(int error, const char* description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
+
 namespace workshop
 {
 Application::Application(char* name)
 {
 	// Init GLFW
+	glfwSetErrorCallback(GLFWErrorCallback);
 	int glfw_err_code = glfwInit();
 	assertf(glfw_err_code, "[!] Failed to Init GLFW");
 
@@ -26,79 +33,11 @@ Application::Application(char* name)
 	int glad_err_code = gladLoadGL();
 	assertf(glad_err_code, "[!] Failed to Init GLAD");
 
-	// Imgui setup
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-
-	// General Config
-	ImGuiIO& io = ImGui::GetIO();
-	(void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-	// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-	// ImGui Theme
-	ImGui::StyleColorsDark();
-	ImVec4* colors				= ImGui::GetStyle().Colors;
-	colors[ImGuiCol_WindowBg].w = 1.0f;
-
-	// ImGui init
-	ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-	ImGui_ImplOpenGL3_Init("#version 460");
+	m_UIManager = std::make_unique<UIManager>(m_Window);
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {
-		/* Render here */
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		{ // IMGUI WINDOW
-			// Window with Docking Space
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->GetWorkPos());
-			ImGui::SetNextWindowSize(viewport->GetWorkSize());
-			ImGui::SetNextWindowViewport(viewport->ID);
-
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking |
-											ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-											ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-											ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-
-			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-				window_flags |= ImGuiWindowFlags_NoBackground;
-
-			static bool isOpen = true;
-			ImGui::Begin("DockSpace Demo", &isOpen, window_flags);
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-			ImGui::End();
-
-			ImGui::PopStyleVar(3);
-		}
-
-		ImGui::ShowDemoWindow();
-
-		static bool show_another_window = true;
-		// 3. Show another simple window.
-		if (show_another_window) {
-			ImGui::Begin("Another Window",
-						 &show_another_window); // Pass a pointer to our bool variable (the window will have a closing
-												// button that will clear the bool when clicked)
-			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me"))
-				show_another_window = false;
-			ImGui::End();
-		}
-		// finish imgui frame
-		ImGui::Render();
+		// Update viewport size
 		int display_w, display_h;
 		glfwGetFramebufferSize(m_Window, &display_w, &display_h);
 		glViewport(0, 0, display_w, display_h);
@@ -107,23 +46,21 @@ Application::Application(char* name)
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Draw imgui to the buffer
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// Draw the ui
+		m_UIManager->Draw();
 
-		/* Swap front and back buffers */
+		// Swap front and back buffers
 		glfwSwapBuffers(m_Window);
 
-		/* Poll for and process events */
+		// Poll for and process events
 		glfwPollEvents();
 	}
 }
 
 Application::~Application()
 {
-	// clean imgui
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	// We need to delete it early because it call glfw functions
+	m_UIManager.reset();
 
 	// clean glfw
 	glfwDestroyWindow(m_Window);

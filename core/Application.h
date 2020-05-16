@@ -4,6 +4,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "UI.h"
+
 #ifndef WIDTH
 #define WIDTH 800
 #endif
@@ -21,5 +23,7 @@ class Application
 
   private:
 	GLFWwindow* m_Window;
+
+	std::unique_ptr<UIManager> m_UIManager;
 };
 } // namespace workshop

@@ -5,6 +5,8 @@ cc_binary(
         "Main.cpp",
         "Application.h",
         "Application.cpp",
+        "UI.h",
+        "UI.cpp",
         ],
     deps = [
         "//thirdparty:glfw",
