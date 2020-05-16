@@ -1,9 +1,19 @@
 cc_binary(
     name = "workshop",
-    srcs = ["main.cpp"],
+    srcs = [
+        "Common.h",
+        "Main.cpp",
+        "Application.h",
+        "Application.cpp",
+        ],
     deps = [
         "//thirdparty:glfw",
         "//thirdparty:glad",
         "//thirdparty:imgui",
+    ],
+    defines = [
+        "GLFW_INCLUDE_NONE",
+        "WIDTH=1280",
+        "HEIGHT=720",
     ],
 )

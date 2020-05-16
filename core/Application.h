@@ -1,0 +1,25 @@
+#pragma once
+
+#include "Common.h"
+
+#include <GLFW/glfw3.h>
+
+#ifndef WIDTH
+#define WIDTH 800
+#endif
+#ifndef HEIGHT
+#define HEIGHT 600
+#endif
+
+namespace workshop
+{
+class Application
+{
+  public:
+	Application(char* name = "new app");
+	~Application();
+
+  private:
+	GLFWwindow* m_Window;
+};
+} // namespace workshop
