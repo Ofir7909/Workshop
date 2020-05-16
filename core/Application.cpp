@@ -9,7 +9,14 @@
 // glfw error callback
 void GLFWErrorCallback(int error, const char* description)
 {
-	fprintf(stderr, "Error: %s\n", description);
+	fprintf(stderr, "[!] GLFWError: %s\n", description);
+}
+
+void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+									const GLchar* message, const void* userParam)
+{
+	fprintf(stderr, "[!] OpenGL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type, severity, message);
 }
 
 namespace workshop
@@ -32,6 +39,10 @@ Application::Application(char* name)
 	// Init GLAD
 	int glad_err_code = gladLoadGL();
 	assertf(glad_err_code, "[!] Failed to Init GLAD");
+
+	// set openGL error callback
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(OpenGLErrorCallback, 0);
 
 	m_UIManager = std::make_unique<UIManager>(m_Window);
 
