@@ -4,55 +4,50 @@
 #include "UIWindow.h"
 
 #include "Nodes/Node.h"
+#include "Nodes/NodeLink.h"
 #include <imnodes.h>
 
-namespace workshop {
-class NodeEditorWindow : public UIWindow {
-public:
-  NodeEditorWindow();
-  virtual void Draw() override;
+namespace workshop
+{
+class NodeEditorWindow : public UIWindow
+{
+  public:
+	NodeEditorWindow();
+	virtual void Draw() override;
 
-private:
-  std::vector<Node> m_Nodes;
+  private:
+	std::vector<Node> m_Nodes;
+	std::vector<NodeLink> m_NodesLinks;
 };
 
-NodeEditorWindow::NodeEditorWindow() {
-  m_Nodes.emplace_back("Test Node 1 REALY LONG NAMEMEEMEMMEMEMEMEM");
-  m_Nodes.emplace_back("Test Node 2");
-  m_Nodes.emplace_back("Test Node 3");
+NodeEditorWindow::NodeEditorWindow()
+{
+	m_Nodes.emplace_back("Test Node 1 REALY LONG NAMEMEEMEMMEMEMEMEM");
+	m_Nodes.emplace_back("Test Node 2");
+	m_Nodes.emplace_back("Test Node 3");
 }
 
-void NodeEditorWindow::Draw() {
-  // NOTE TO SELF:
-  // Almost everything in imnodes:: need a uniq id.
-  //
+void NodeEditorWindow::Draw()
+{
+	// start the window
+	ImGui::Begin("node editor");
+	imnodes::BeginNodeEditor();
 
-  ImGui::Begin("node editor");
-  imnodes::BeginNodeEditor();
+	// Draw nodes
+	for (auto node : m_Nodes) node.Draw();
 
-  for (auto node : m_Nodes)
-    node.Draw();
+	// Draw links
+	for (auto link : m_NodesLinks) { link.Draw(); }
 
-  // Draw links
-  /*
-  static std::vector<std::pair<int, int>> links;
+	// End tje window
+	imnodes::EndNodeEditor();
+	ImGui::End();
 
-  for (int i = 0; i < links.size(); ++i) {
-    const std::pair<int, int> p = links[i];
-    // in this case, we just use the array index of the link
-    // as the unique identifier
-    imnodes::Link(i, p.first, p.second);
-  }
-  */
-
-  imnodes::EndNodeEditor();
-  ImGui::End();
-
-  /*int start_attr, end_attr;
-  if (imnodes::IsLinkCreated(&start_attr, &end_attr)) {
-    links.push_back(std::make_pair(start_attr, end_attr));
-  }
-  */
+	// Update Links
+	int start_attr, end_attr;
+	if (imnodes::IsLinkCreated(&start_attr, &end_attr)) {
+		m_NodesLinks.emplace_back(start_attr, end_attr);
+	}
 }
 
 } // namespace workshop

@@ -56,5 +56,8 @@
         "deque": "cpp",
         "stack": "cpp",
         "unordered_set": "cpp"
+    },
+    "files.exclude": {
+        "bazel-*/": true,
     }
 }

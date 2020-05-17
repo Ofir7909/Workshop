@@ -14,6 +14,8 @@ cc_binary(
         "Nodes/Node.cpp",
         "Nodes/NodeAttribute.h",
         "Nodes/NodeAttribute.cpp",
+        "Nodes/NodeLink.h",
+
         ],
     deps = [
         "//thirdparty:glfw",
