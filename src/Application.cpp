@@ -7,6 +7,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include <UI/DockspaceWindow.h>
+#include <UI/NodeEditorWindow.h>
 
 namespace workshop
 {
@@ -48,7 +49,8 @@ Application::Application(char* name)
 
 	// Set up the UI
 	m_UIManager = std::make_unique<UIManager>(m_Window);
-	m_UIManager->AddWindow(new DockspaceWindow()); // the Dockspace has to be the first window!=
+	m_UIManager->AddWindow(new DockspaceWindow());	// the Dockspace has to be the first window!=
+	m_UIManager->AddWindow(new NodeEditorWindow()); // the Dockspace has to be the first window!=
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {

@@ -8,13 +8,14 @@ cc_binary(
         "UI/UIManager.h",
         "UI/UIManager.cpp",
         "UI/UIWindow.h",
-        "UI/DemoWindow.h",
         "UI/DockspaceWindow.h",
+        "UI/NodeEditorWindow.h",
         ],
     deps = [
         "//thirdparty:glfw",
         "//thirdparty:glad",
         "//thirdparty:imgui",
+        "//thirdparty:imnodes",
     ],
     defines = [
         "GLFW_INCLUDE_NONE",

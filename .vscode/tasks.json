@@ -9,7 +9,7 @@
 			"command": "bazel.exe",
 			"args": [
 				"build",
-				"//core:workshop",
+				"//src:workshop",
 				"--verbose_failures"
 			],
 			"problemMatcher": [],

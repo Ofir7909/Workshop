@@ -24,12 +24,18 @@ UIManager::UIManager(GLFWwindow* window)
 	// ImGui init
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
+
+	// Imnodes init
+	imnodes::Initialize();
 }
 
 UIManager::~UIManager()
 {
 	// free all memory of the windows.
 	for (auto window : m_Windows) { delete window; }
+
+	// clean imnodes
+	imnodes::Shutdown();
 
 	// clean imgui
 	ImGui_ImplOpenGL3_Shutdown();
