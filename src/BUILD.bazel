@@ -10,6 +10,10 @@ cc_binary(
         "UI/UIWindow.h",
         "UI/DockspaceWindow.h",
         "UI/NodeEditorWindow.h",
+        "Nodes/Node.h",
+        "Nodes/Node.cpp",
+        "Nodes/NodeAttribute.h",
+        "Nodes/NodeAttribute.cpp",
         ],
     deps = [
         "//thirdparty:glfw",
