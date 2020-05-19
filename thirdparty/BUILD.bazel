@@ -150,6 +150,21 @@ cc_library(
 )
 
 ###
+### GLM
+###
+
+cc_library(
+    name = "glm",
+    hdrs = glob([
+        "glm/*.hpp",
+        "glm/**/*.hpp",
+    ]),
+    includes = ["glm"],
+    textual_hdrs = glob(["glm/**/*.inl"]),
+    visibility = ["//visibility:public"],
+)
+
+###
 ### IMGUI
 ###
 
@@ -196,5 +211,17 @@ cc_library(
     hdrs = ["imnodes/imnodes.h"],
     includes = ["imnodes/"],
     deps = [":imgui"],
+    visibility = ["//visibility:public"],
+)
+
+###
+### nlohmann/JSON
+###
+
+cc_library(
+    name = "nlohmann_json",
+    srcs = ["json/json.hpp"],
+    hdrs = ["json/json.hpp"],
+    includes = ["json/"],
     visibility = ["//visibility:public"],
 )

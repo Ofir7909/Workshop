@@ -20,8 +20,10 @@ cc_binary(
     deps = [
         "//thirdparty:glfw",
         "//thirdparty:glad",
+        "//thirdparty:glm",
         "//thirdparty:imgui",
         "//thirdparty:imnodes",
+        "//thirdparty:nlohmann_json",
     ],
     defines = [
         "GLFW_INCLUDE_NONE",
