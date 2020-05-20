@@ -16,6 +16,11 @@ struct NodeAttributeProperties
 {
 	NodeAttributeType type;
 	std::string label;
+
+	static inline NodeAttributeType StringToType(std::string str)
+	{
+		return (str == "input") ? NodeAttributeType_Input : NodeAttributeType_Output;
+	}
 };
 
 class NodeAttribute

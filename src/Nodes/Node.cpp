@@ -4,10 +4,13 @@ namespace workshop
 {
 int Node::s_Count = 0;
 
-Node::Node(const NodeProperties& properties): m_Properties(properties)
+Node::Node(const NodeProperties& properties, const ImVec2& position): m_Properties(properties)
 {
 	m_ID = s_Count;
 	s_Count++;
+
+	// Set position
+	imnodes::SetNodeScreenSpacePos(m_ID, position);
 
 	for (auto attrib : m_Properties.AttributesProperties) { m_Attributes.emplace_back(attrib); }
 }

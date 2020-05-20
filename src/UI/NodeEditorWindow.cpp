@@ -4,19 +4,7 @@ namespace workshop
 {
 NodeEditorWindow::NodeEditorWindow()
 {
-	// m_NodeDefinitions.emplace_back(NodeProperties {"Test Name", "Cat5",
-	// "Descirption"}); m_NodeDefinitions.emplace_back(NodeProperties {"Add Node",
-	// "Cat5", "Descirption"}); m_NodeDefinitions.emplace_back(
-	//	NodeProperties {"A RElly long name asdasdas asdfasdfas Test Name",
-	//"Cat5", "Descirption"});
-
 	LoadNodes("res/Nodes/NodeDefinitions.json");
-
-	m_Nodes.emplace_back(m_NodeDefinitions[0]);
-	m_Nodes.emplace_back(m_NodeDefinitions[1]);
-	m_Nodes.emplace_back(m_NodeDefinitions[0]);
-	m_Nodes.emplace_back(m_NodeDefinitions[1]);
-	m_Nodes.emplace_back(m_NodeDefinitions[2]);
 }
 
 void NodeEditorWindow::Draw()
@@ -26,10 +14,10 @@ void NodeEditorWindow::Draw()
 	imnodes::BeginNodeEditor();
 
 	// Draw nodes
-	for (auto node : m_Nodes) node.Draw();
+	for (auto node : m_Nodes) { node.Draw(); }
 
 	// Draw links
-	for (auto link : m_NodesLinks) { link.Draw(); }
+	for (auto link : m_NodesLinks) { link.second.Draw(); }
 
 	// End tje window
 	imnodes::EndNodeEditor();
@@ -38,7 +26,25 @@ void NodeEditorWindow::Draw()
 	// Update Links
 	int start_attr, end_attr;
 	if (imnodes::IsLinkCreated(&start_attr, &end_attr)) {
-		m_NodesLinks.emplace_back(start_attr, end_attr);
+		int id;
+		NodeLink nodeLink(start_attr, end_attr, &id);
+		m_NodesLinks.emplace(id, nodeLink);
+	}
+
+	// Add Node Menu (right mouse click)
+	if (ImGui::GetIO().MouseClicked[1]) {
+		ImGui::OpenPopup("add_node_menu");
+	}
+
+	if (ImGui::BeginPopup("add_node_menu")) {
+		ImVec2 click_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+		ImGui::Text("Add Node");
+		for (auto nodeDef : m_NodeDefinitions) {
+			if (ImGui::MenuItem(nodeDef.first.c_str())) {
+				m_Nodes.emplace_back(nodeDef.second, click_pos);
+			}
+		}
+		ImGui::EndPopup();
 	}
 }
 
@@ -75,12 +81,12 @@ void NodeEditorWindow::LoadNodes(std::string filepath)
 		for (auto attrib : attributes) {
 			NodeAttributeProperties attribProps;
 			attrib.at("label").get_to(attribProps.label);
-			auto type		 = (attrib.at("type") == "input") ? NodeAttributeType_Input : NodeAttributeType_Output;
+			auto type		 = NodeAttributeProperties::StringToType(attrib.at("type"));
 			attribProps.type = type;
 
 			props.AttributesProperties.emplace_back(attribProps);
 		}
-		m_NodeDefinitions.emplace_back(props);
+		m_NodeDefinitions.emplace(props.label, props);
 	}
 }
 } // namespace workshop

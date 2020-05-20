@@ -20,8 +20,8 @@ class NodeEditorWindow : public UIWindow
 
   private:
 	std::vector<Node> m_Nodes; // Nodes on the Editor.
-	std::vector<NodeLink> m_NodesLinks;
-	std::vector<NodeProperties> m_NodeDefinitions; // Each entry is a diffrent node type(loaded from a
-												   // json file)
+	std::unordered_map<int, NodeLink> m_NodesLinks;
+	std::map<std::string, NodeProperties> m_NodeDefinitions; // Each entry is a diffrent node type(loaded from
+															 // a json file)
 };
 } // namespace workshop

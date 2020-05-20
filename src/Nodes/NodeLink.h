@@ -9,7 +9,7 @@ namespace workshop
 class NodeLink
 {
   public:
-	NodeLink(int start_attribute, int end_attribute);
+	NodeLink(int start_attribute, int end_attribute, int* id = nullptr);
 	void Draw();
 
   private:

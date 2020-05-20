@@ -23,7 +23,7 @@ struct NodeProperties
 class Node
 {
   public:
-	Node(const NodeProperties& properties);
+	Node(const NodeProperties& properties, const ImVec2& position);
 	void Draw();
 
   private:
