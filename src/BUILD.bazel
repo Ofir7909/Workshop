@@ -31,4 +31,5 @@ cc_binary(
         "HEIGHT=720",
     ],
     includes = ["./"],
+    data = ["//res:resources"],
 )

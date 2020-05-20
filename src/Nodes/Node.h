@@ -4,19 +4,31 @@
 #include <imgui.h>
 #include <imnodes.h>
 
+#include <glm/glm.hpp>
+
 #include "Nodes/NodeAttribute.h"
 
 namespace workshop
 {
+struct NodeProperties
+{
+	std::string filename;
+	std::string label;
+	std::string category;
+	std::string description;
+	glm::ivec3 color;
+	std::vector<NodeAttributeProperties> AttributesProperties;
+};
+
 class Node
 {
   public:
-	Node(const std::string& name);
+	Node(const NodeProperties& properties);
 	void Draw();
 
   private:
 	int m_ID;
-	std::string m_Name;
+	NodeProperties m_Properties;
 	std::vector<NodeAttribute> m_Attributes;
 
   private:

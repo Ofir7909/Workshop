@@ -12,16 +12,21 @@ enum NodeAttributeType
 	NodeAttributeType_Output
 };
 
+struct NodeAttributeProperties
+{
+	NodeAttributeType type;
+	std::string label;
+};
+
 class NodeAttribute
 {
   public:
-	NodeAttribute(NodeAttributeType type, const std::string& name);
+	NodeAttribute(const NodeAttributeProperties& properties);
 	void Draw();
 
   private:
 	int m_ID;
-	std::string m_Name;
-	NodeAttributeType m_Type;
+	NodeAttributeProperties m_Properties;
 
   private:
 	static int s_Count;
