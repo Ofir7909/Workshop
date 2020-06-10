@@ -21,10 +21,13 @@ class UIManager
 
 	void Draw();
 
-	std::vector<UIWindow*> GetWindows() const { return m_Windows; }
-	void AddWindow(UIWindow* window) { m_Windows.emplace_back(window); }
+	template<typename T>
+	void AddWindow()
+	{
+		m_Windows.emplace_back(std::make_unique<T>());
+	}
 
   private:
-	std::vector<UIWindow*> m_Windows;
+	std::vector<std::unique_ptr<UIWindow>> m_Windows;
 };
 } // namespace workshop

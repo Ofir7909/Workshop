@@ -21,6 +21,9 @@ DockspaceWindow::DockspaceWindow()
 					ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
 					ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 	m_DockspaceFlags = ImGuiDockNodeFlags_None;
+
+	if (m_DockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
+		m_WindowFlags |= ImGuiWindowFlags_NoBackground;
 }
 
 void DockspaceWindow::Draw()
@@ -36,15 +39,13 @@ void DockspaceWindow::Draw()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-	if (m_DockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
-		m_WindowFlags |= ImGuiWindowFlags_NoBackground;
-
+	// Draw
 	ImGui::Begin("DockSpace Demo", &m_Show, m_WindowFlags);
 	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
 	ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), m_DockspaceFlags);
 	ImGui::End();
 
+	// Clear style changes
 	ImGui::PopStyleVar(3);
 }
-
 } // namespace workshop

@@ -12,7 +12,7 @@ Node::Node(const NodeProperties& properties, const ImVec2& position): m_Properti
 	// Set position
 	imnodes::SetNodeScreenSpacePos(m_ID, position);
 
-	for (auto attrib : m_Properties.AttributesProperties) { m_Attributes.emplace_back(attrib); }
+	for (const auto& attrib : m_Properties.AttributesProperties) { m_Attributes.emplace_back(attrib, (Node*)this); }
 }
 void Node::Draw()
 {
@@ -34,7 +34,7 @@ void Node::Draw()
 	ImGui::TextUnformatted(m_Properties.label.c_str());
 	imnodes::EndNodeTitleBar();
 
-	for (auto attrib : m_Attributes) { attrib.Draw(); }
+	for (auto& attrib : m_Attributes) { attrib.Draw(); }
 
 	imnodes::EndNode();
 

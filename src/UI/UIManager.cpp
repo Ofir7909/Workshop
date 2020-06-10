@@ -31,9 +31,6 @@ UIManager::UIManager(GLFWwindow* window)
 
 UIManager::~UIManager()
 {
-	// free all memory of the windows.
-	for (auto window : m_Windows) { delete window; }
-
 	// clean imnodes
 	imnodes::Shutdown();
 
@@ -51,15 +48,16 @@ void UIManager::Draw()
 	ImGui::NewFrame();
 
 	// Draw all the windows
-	for (auto window : m_Windows) { window->Draw(); }
+	for (auto const& window : m_Windows) { window->Draw(); }
 
-	{ // Exampe Window 1
-		ImGui::ShowDemoWindow();
-		// Render to buffer
-		ImGui::Render();
-		// Draw to the window
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	}
+	// Exampe Window 1
+	// Just to test docking, Remove it later
+	ImGui::ShowDemoWindow();
+
+	// Render to buffer
+	ImGui::Render();
+	// Draw to the window
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 } // namespace workshop

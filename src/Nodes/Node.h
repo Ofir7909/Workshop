@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Nodes/NodeAttribute.h"
+#include "NodeAttribute.h"
 
 namespace workshop
 {

@@ -1,23 +1,27 @@
 cc_binary(
     name = "workshop",
     srcs = [
-        "Common.h",
         "Main.cpp",
+        "Common.h",
+
         "Application.h",
         "Application.cpp",
+
         "UI/UIManager.h",
         "UI/UIManager.cpp",
         "UI/UIWindow.h",
         "UI/DockspaceWindow.h",
         "UI/NodeEditorWindow.h",
         "UI/NodeEditorWindow.cpp",
+
+        "Nodes/NodeManager.h",
+        "Nodes/NodeManager.cpp",
         "Nodes/Node.h",
         "Nodes/Node.cpp",
         "Nodes/NodeAttribute.h",
         "Nodes/NodeAttribute.cpp",
         "Nodes/NodeLink.h",
         "Nodes/NodeLink.cpp",
-
         ],
     deps = [
         "//thirdparty:glfw",

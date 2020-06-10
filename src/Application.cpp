@@ -20,6 +20,9 @@ void GLFWErrorCallback(int error, const char* description)
 void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 									const GLchar* message, const void* userParam)
 {
+	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+		return;
+
 	fprintf(stderr, "[!] OpenGL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
 			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type, severity, message);
 }
@@ -34,7 +37,7 @@ Application::Application(char* name)
 	// cerate window
 	m_Window = glfwCreateWindow(WIDTH, HEIGHT, name, NULL, NULL);
 	assertf(m_Window != NULL, "[!] Failed to Create a Window");
-	std::cout << "[-] Created a new window(WIDTHxHEIGHT)" << WIDTH << HEIGHT << std::endl;
+	std::cout << "[-] Created a new window( " << WIDTH << " x " << HEIGHT << " )" << std::endl;
 
 	glfwMakeContextCurrent(m_Window);
 	glfwSwapInterval(1); // Enable Vsync
@@ -49,8 +52,8 @@ Application::Application(char* name)
 
 	// Set up the UI
 	m_UIManager = std::make_unique<UIManager>(m_Window);
-	m_UIManager->AddWindow(new DockspaceWindow());	// the Dockspace has to be the first window!=
-	m_UIManager->AddWindow(new NodeEditorWindow()); // the Dockspace has to be the first window!=
+	m_UIManager->AddWindow<DockspaceWindow>(); // The Dockspace must be first!!!
+	m_UIManager->AddWindow<NodeEditorWindow>();
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {
