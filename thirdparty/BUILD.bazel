@@ -231,3 +231,22 @@ cc_library(
     strip_include_prefix = "",
     visibility = ["//visibility:public"],
 )
+
+###
+### spdlog
+###
+
+cc_library(
+    name = "spdlog",
+    srcs = glob([
+        "spdlog/src/*.cpp",
+    ]),
+    hdrs = glob([
+        "spdlog/include/**/*.h",
+        ]),
+    includes = ["spdlog/include/"],
+    defines=[
+      "SPDLOG_COMPILED_LIB"
+    ],
+    visibility = ["//visibility:public"],
+)

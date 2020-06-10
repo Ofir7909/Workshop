@@ -68,7 +68,14 @@
         "xlocbuf": "cpp",
         "xlocmes": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "condition_variable": "cpp",
+        "mutex": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "regex": "cpp",
+        "thread": "cpp",
+        "variant": "cpp"
     },
     "files.exclude": {
         "bazel-*/": true,

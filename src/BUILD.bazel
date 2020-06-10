@@ -6,6 +6,8 @@ cc_binary(
 
         "Application.h",
         "Application.cpp",
+        "Log.h",
+        "Log.cpp",
 
         "UI/UIManager.h",
         "UI/UIManager.cpp",
@@ -30,6 +32,7 @@ cc_binary(
         "//thirdparty:imgui",
         "//thirdparty:imnodes",
         "//thirdparty:nlohmann_json",
+        "//thirdparty:spdlog",
     ],
     defines = [
         "GLFW_INCLUDE_NONE",

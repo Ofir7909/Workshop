@@ -29,6 +29,9 @@ void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenu
 
 Application::Application(char* name)
 {
+	// Initialize our logging library.
+	Log::Init();
+
 	// Init GLFW
 	glfwSetErrorCallback(GLFWErrorCallback);
 	int glfw_err_code = glfwInit();
@@ -37,7 +40,7 @@ Application::Application(char* name)
 	// cerate window
 	m_Window = glfwCreateWindow(WIDTH, HEIGHT, name, NULL, NULL);
 	assertf(m_Window != NULL, "[!] Failed to Create a Window");
-	std::cout << "[-] Created a new window( " << WIDTH << " x " << HEIGHT << " )" << std::endl;
+	WORKSHOP_INFO("Created a new window({0} x {1})", WIDTH, HEIGHT);
 
 	glfwMakeContextCurrent(m_Window);
 	glfwSwapInterval(1); // Enable Vsync

@@ -11,11 +11,12 @@
 #include <utility>
 #include <vector>
 
-
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "Log.h"
 
 #define clean_errno() (errno == 0 ? "None" : strerror(errno))
 #define log_error(M, ...) \
