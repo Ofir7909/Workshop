@@ -15,5 +15,8 @@ class ViewportWindow : public UIWindow
 
   private:
 	std::unique_ptr<Viewport> m_Viewport;
+	unsigned int m_Framebuffer;
+	unsigned int m_TextureColorBuffer;
+	unsigned int m_RenderBuffer;
 };
 } // namespace workshop
