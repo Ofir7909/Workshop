@@ -15,6 +15,8 @@ cc_binary(
         "UI/DockspaceWindow.h",
         "UI/NodeEditorWindow.h",
         "UI/NodeEditorWindow.cpp",
+        "UI/ViewportWindow.h",
+        "UI/ViewportWindow.cpp",
 
         "Nodes/NodeManager.h",
         "Nodes/NodeManager.cpp",
@@ -24,6 +26,9 @@ cc_binary(
         "Nodes/NodeAttribute.cpp",
         "Nodes/NodeLink.h",
         "Nodes/NodeLink.cpp",
+
+        "Rendering/Viewport.h",
+        "Rendering/Viewport.cpp",
         ],
     deps = [
         "//thirdparty:glfw",

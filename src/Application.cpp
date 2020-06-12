@@ -8,6 +8,7 @@
 
 #include <UI/DockspaceWindow.h>
 #include <UI/NodeEditorWindow.h>
+#include <UI/ViewportWindow.h>
 
 namespace workshop
 {
@@ -57,6 +58,7 @@ Application::Application(char* name)
 	m_UIManager = std::make_unique<UIManager>(m_Window);
 	m_UIManager->AddWindow<DockspaceWindow>(); // The Dockspace must be first!!!
 	m_UIManager->AddWindow<NodeEditorWindow>();
+	m_UIManager->AddWindow<ViewportWindow>();
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(m_Window)) {

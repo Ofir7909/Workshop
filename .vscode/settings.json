@@ -78,6 +78,7 @@
         "variant": "cpp"
     },
     "files.exclude": {
-        "bazel-*/": true,
-    }
+        "bazel-*/": false,
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
