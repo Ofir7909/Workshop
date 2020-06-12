@@ -24,12 +24,13 @@ class Node
 {
   public:
 	Node(const NodeProperties& properties, const ImVec2& position);
+	~Node();
 	void Draw();
 
   private:
 	int m_ID;
 	NodeProperties m_Properties;
-	std::vector<NodeAttribute> m_Attributes;
+	std::vector<NodeAttribute*> m_Attributes;
 
   private:
 	static int s_Count;

@@ -14,10 +14,10 @@ void NodeEditorWindow::Draw()
 	imnodes::BeginNodeEditor();
 
 	// Draw nodes
-	for (auto& node : m_NodeManager->GetNodes()) { node.Draw(); }
+	for (const auto& node : m_NodeManager->GetNodes()) { node->Draw(); }
 
 	// Draw links
-	for (auto& link : m_NodeManager->GetLinks()) { link.second->Draw(); }
+	for (const auto& link : m_NodeManager->GetLinks()) { link.second->Draw(); }
 
 	// End the window
 	imnodes::EndNodeEditor();

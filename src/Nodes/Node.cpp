@@ -12,8 +12,17 @@ Node::Node(const NodeProperties& properties, const ImVec2& position): m_Properti
 	// Set position
 	imnodes::SetNodeScreenSpacePos(m_ID, position);
 
-	for (const auto& attrib : m_Properties.AttributesProperties) { m_Attributes.emplace_back(attrib, (Node*)this); }
+	for (const auto& attrib : m_Properties.AttributesProperties) {
+		m_Attributes.emplace_back(new NodeAttribute(attrib, (Node*)this));
+	}
 }
+
+Node::~Node()
+{
+	for (auto ptr : m_Attributes) { delete ptr; }
+	m_Attributes.clear();
+}
+
 void Node::Draw()
 {
 	// Set Colors
@@ -34,7 +43,7 @@ void Node::Draw()
 	ImGui::TextUnformatted(m_Properties.label.c_str());
 	imnodes::EndNodeTitleBar();
 
-	for (auto& attrib : m_Attributes) { attrib.Draw(); }
+	for (const auto& attrib : m_Attributes) { attrib->Draw(); }
 
 	imnodes::EndNode();
 

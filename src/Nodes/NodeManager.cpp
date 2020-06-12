@@ -57,7 +57,7 @@ void NodeManager::LoadNodes(const std::string& filepath)
 
 void NodeManager::AddNode(const NodeProperties& properties, const ImVec2& position)
 {
-	m_Nodes.emplace_back(properties, position);
+	m_Nodes.emplace_back(std::make_unique<Node>(properties, position));
 }
 
 void NodeManager::TryAddLink(int start_attr, int end_attr)
