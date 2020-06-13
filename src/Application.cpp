@@ -36,11 +36,11 @@ Application::Application(char* name)
 	// Init GLFW
 	glfwSetErrorCallback(GLFWErrorCallback);
 	int glfw_err_code = glfwInit();
-	assertf(glfw_err_code, "[!] Failed to Init GLFW");
+	WORKSHOP_ASSERT(glfw_err_code, "Failed to Init GLFW");
 
 	// cerate window
 	m_Window = glfwCreateWindow(WIDTH, HEIGHT, name, NULL, NULL);
-	assertf(m_Window != NULL, "[!] Failed to Create a Window");
+	WORKSHOP_ASSERT(m_Window != NULL, "Failed to Create a Window");
 	WORKSHOP_INFO("Created a new window({0} x {1})", WIDTH, HEIGHT);
 
 	glfwMakeContextCurrent(m_Window);
@@ -48,7 +48,7 @@ Application::Application(char* name)
 
 	// Init GLAD
 	int glad_err_code = gladLoadGL();
-	assertf(glad_err_code, "[!] Failed to Init GLAD");
+	WORKSHOP_ASSERT(glad_err_code, "Failed to Init GLAD");
 
 	// set openGL error callback
 	glEnable(GL_DEBUG_OUTPUT);

@@ -19,7 +19,18 @@ class Log
 } // namespace workshop
 
 // Log Macros
-#define WORKSHOP_TRACE(...) workshop::Log::GetLogger()->trace(__VA_ARGS__)
-#define WORKSHOP_INFO(...)	workshop::Log::GetLogger()->info(__VA_ARGS__)
-#define WORKSHOP_WARN(...)	workshop::Log::GetLogger()->warn(__VA_ARGS__)
-#define WORKSHOP_ERROR(...) workshop::Log::GetLogger()->error(__VA_ARGS__)
+#define WORKSHOP_TRACE(...) workshop::Log::GetLogger()->trace(__VA_ARGS__);
+#define WORKSHOP_INFO(...)	workshop::Log::GetLogger()->info(__VA_ARGS__);
+#define WORKSHOP_WARN(...)	workshop::Log::GetLogger()->warn(__VA_ARGS__);
+#define WORKSHOP_ERROR(...)                             \
+	{                                                   \
+		workshop::Log::GetLogger()->error(__VA_ARGS__); \
+		assert(false);                                  \
+	}
+
+#define WORKSHOP_ASSERT(condition, ...) \
+	if (!(condition)) {                 \
+		WORKSHOP_ERROR(##__VA_ARGS__);  \
+	}
+
+#define WORKSHOP_BREAK() assert(false);

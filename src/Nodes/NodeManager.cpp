@@ -19,7 +19,7 @@ void NodeManager::LoadNodes(const std::string& filepath)
 
 	// open json file
 	std::ifstream file(filepath);
-	assertf(file.is_open(), "Failed to open file %s", filepath.c_str());
+	WORKSHOP_ASSERT(file.is_open(), "Failed to open file %s", filepath.c_str());
 
 	// Parsing the file
 	json j;
@@ -27,7 +27,7 @@ void NodeManager::LoadNodes(const std::string& filepath)
 
 	// Node array
 	auto nodes = j.at("nodes");
-	assertf(nodes.is_array(), "Error Parsing json, 'nodes' is not an array!");
+	WORKSHOP_ASSERT(nodes.is_array(), "Error Parsing json, 'nodes' is not an array!");
 
 	// For each node
 	for (auto node : nodes) {
@@ -40,8 +40,8 @@ void NodeManager::LoadNodes(const std::string& filepath)
 		props.color = glm::ivec3(col[0], col[1], col[2]);
 
 		auto attributes = node.at("attributes");
-		assertf(attributes.is_array(), "Error Parsing json, 'attributes' of node %s is not an array !",
-				props.filename.c_str());
+		WORKSHOP_ASSERT(attributes.is_array(), "Error Parsing json, 'attributes' of node %s is not an array !",
+						props.filename.c_str());
 
 		for (auto attrib : attributes) {
 			NodeAttributeProperties attribProps;
