@@ -89,7 +89,7 @@ cc_library(
     	"@bazel_tools//src/conditions:linux_x86_64": LINUX_LINKOPTS,
 	}),
     deps = [":glfw_src"],
-    strip_include_prefix = "glfw/include",
+    includes = ["glfw/include"],
     visibility = ["//visibility:public"],
 )
 
@@ -186,5 +186,20 @@ cc_library(
     defines=[
       "SPDLOG_COMPILED_LIB"
     ],
+    visibility = ["//visibility:public"],
+)
+
+###
+### pybind11
+###
+
+cc_library(
+    name = "pybind",
+    hdrs = glob([
+            "pybind/include/pybind11/**/*.h",
+        ],
+        exclude = ["pybind/include/pybind11/common.h"],
+    ),
+    includes = ["pybind/include/"],
     visibility = ["//visibility:public"],
 )

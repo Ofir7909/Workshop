@@ -38,6 +38,7 @@ cc_binary(
         "//thirdparty:imnodes",
         "//thirdparty:nlohmann_json",
         "//thirdparty:spdlog",
+        "//thirdparty:pybind",
     ],
     defines = [
         "GLFW_INCLUDE_NONE",
