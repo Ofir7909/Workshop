@@ -32,6 +32,8 @@ cc_binary(
         "Rendering/Shader.h",
         "Rendering/Shader.cpp",
         "Rendering/Vertex.h",
+        "Rendering/Buffer.h",
+        "Rendering/Buffer.cpp",
         ],
     deps = [
         "//thirdparty:glfw",

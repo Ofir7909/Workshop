@@ -74,20 +74,19 @@ unsigned int Shader::CreateShaderProgram(const std::string& filepath)
 		int length;
 		glGetProgramiv(id, GL_INFO_LOG_LENGTH, &length);
 
-		char* message = new char[length];
-		glGetProgramInfoLog(m_RendererID, length, &length, message);
-		WORKSHOP_ERROR("Error linking shader\n{0}", message);
+		std::vector<char> message(length);
+		glGetProgramInfoLog(m_RendererID, length, &length, &message[0]);
+		WORKSHOP_ERROR("Error linking shader\n{0}", message.data());
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 		glDeleteProgram(id);
-		delete message;
 		return 0;
 	}
 
 	// Clean up
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDetachShader(id, vertexShader);
+	glDetachShader(id, fragmentShader);
 
 	return id;
 }
@@ -107,14 +106,13 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 		int length;
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
 
-		char* message = new char[length];
-		glGetShaderInfoLog(id, length, &length, message);
+		std::vector<char> message(length);
+		glGetShaderInfoLog(id, length, &length, &message[0]);
 
 		WORKSHOP_ERROR("Failed to compile {0} shader!\n{1}", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"),
-					   message);
+					   message.data());
 
 		glDeleteShader(id);
-		delete message;
 		return 0;
 	}
 	return id;

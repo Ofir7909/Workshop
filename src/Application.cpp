@@ -38,6 +38,11 @@ Application::Application(char* name)
 	int glfw_err_code = glfwInit();
 	WORKSHOP_ASSERT(glfw_err_code, "Failed to Init GLFW");
 
+	WORKSHOP_INFO("Using OpenGL version {0}.{1}", 4, 6);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	// cerate window
 	m_Window = glfwCreateWindow(WIDTH, HEIGHT, name, NULL, NULL);
 	WORKSHOP_ASSERT(m_Window != NULL, "Failed to Create a Window");

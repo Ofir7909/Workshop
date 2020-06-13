@@ -9,25 +9,34 @@ namespace workshop
 unsigned int fbo;
 unsigned int VAO;
 
-Viewport::Viewport(): m_Shader("res/Shaders/basic.shader")
+Viewport::Viewport()
 {
 	// clang-format off
-	const Vertex vertices[] = {
+	std::vector<Vertex> vertices{
 		{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)},
 		{glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
-		{glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)}
+		{glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)},
+		{glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f)}
+	};
+
+	std::vector<unsigned int> indicies{
+		0,1,2,
+		2,3,0
 	};
 	// clang-format on
+
+	// Shader
+	m_Shader = std::make_unique<Shader>("res/Shaders/basic.shader");
 
 	// Vertex Array
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
+	// Index Buffer
+	m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, indicies.size());
+
 	// Vertex Buffer
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]));
 
 	// vertex attributes
 	// Position
@@ -36,6 +45,11 @@ Viewport::Viewport(): m_Shader("res/Shaders/basic.shader")
 	// Color
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0); // Always unbind first
+	IndexBuffer::Unbind();
+	VertexBuffer::Unbind();
+	Shader::Unbind();
 }
 
 void Viewport::Draw()
@@ -46,9 +60,10 @@ void Viewport::Draw()
 
 	// Bind all objects.
 	glBindVertexArray(VAO);
-	m_Shader.Bind();
+	m_Shader->Bind();
 
 	// Render
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	// glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 } // namespace workshop
