@@ -2,16 +2,6 @@
 ### GLFW
 ###
 
-WIN32_DEFINES = [
-    "_GLFW_WIN32",
-]
-
-WIN32_HDRS = [
-    "glfw/src/win32_joystick.h",
-    "glfw/src/win32_platform.h",
-    "glfw/src/wgl_context.h", 
-]
-
 WIN32_SRCS = [
     "glfw/src/win32_init.c",
     "glfw/src/win32_joystick.c",
@@ -20,25 +10,9 @@ WIN32_SRCS = [
     "glfw/src/win32_time.c",
     "glfw/src/win32_window.c",
     "glfw/src/wgl_context.c",
-]
-
-WIN32_LINKOPTS = [
-    "-DEFAULTLIB:user32.lib",
-    "-DEFAULTLIB:gdi32.lib",
-    "-DEFAULTLIB:shell32.lib",
-]
-
-LINUX_DEFINES = [
-    "_GLFW_HAS_XF86VM",
-    "_GLFW_X11",
-]
-
-LINUX_HDRS = [
-    "glfw/src/glx_context.h",
-    "glfw/src/linux_joystick.h",
-    "glfw/src/posix_thread.h",
-    "glfw/src/posix_time.h",
-    "glfw/src/x11_platform.h",
+    "glfw/src/win32_joystick.h",
+    "glfw/src/win32_platform.h",
+    "glfw/src/wgl_context.h", 
 ]
 
 LINUX_SRCS = [
@@ -49,24 +23,33 @@ LINUX_SRCS = [
     "glfw/src/x11_init.c",
     "glfw/src/x11_monitor.c",
     "glfw/src/x11_window.c",
+    "glfw/src/glx_context.h",
+    "glfw/src/linux_joystick.h",
+    "glfw/src/posix_thread.h",
+    "glfw/src/posix_time.h",
+    "glfw/src/x11_platform.h",
+]
+
+WIN32_DEFINES = [
+    "_GLFW_WIN32",
+]
+
+LINUX_DEFINES = [
+    "_GLFW_HAS_XF86VM",
+    "_GLFW_X11",
+]
+
+WIN32_LINKOPTS = [
+    "-DEFAULTLIB:user32.lib",
+    "-DEFAULTLIB:gdi32.lib",
+    "-DEFAULTLIB:shell32.lib",
 ]
 
 LINUX_LINKOPTS = []
 
 cc_library(
     name = "glfw_src",
-    hdrs = [
-        "glfw/include/GLFW/glfw3.h",
-        "glfw/include/GLFW/glfw3native.h",
-        "glfw/src/egl_context.h",
-        "glfw/src/internal.h",
-        "glfw/src/osmesa_context.h",
-        "glfw/src/mappings.h",
-        "glfw/src/xkb_unicode.h",
-    ] + select({
-		"@bazel_tools//src/conditions:windows": WIN32_HDRS,
-		"@bazel_tools//src/conditions:linux_x86_64": LINUX_HDRS,
-	}),
+   
     srcs = [
         "glfw/src/context.c",
         "glfw/src/egl_context.c",
@@ -77,7 +60,15 @@ cc_library(
         "glfw/src/vulkan.c",
         "glfw/src/window.c",
         "glfw/src/xkb_unicode.c",
-    ] + select({
+        "glfw/src/egl_context.h",
+        "glfw/src/internal.h",
+        "glfw/src/osmesa_context.h",
+        "glfw/src/mappings.h",
+        "glfw/src/xkb_unicode.h",
+        "glfw/include/GLFW/glfw3.h",
+        "glfw/include/GLFW/glfw3native.h",
+    ]
+    + select({
 		"@bazel_tools//src/conditions:windows": WIN32_SRCS,
 		"@bazel_tools//src/conditions:linux_x86_64": LINUX_SRCS,
 	}),
@@ -95,7 +86,7 @@ cc_library(
     ],
     linkopts = select({
 		"@bazel_tools//src/conditions:windows": WIN32_LINKOPTS,
-		"@bazel_tools//src/conditions:linux_x86_64": LINUX_LINKOPTS,
+    	"@bazel_tools//src/conditions:linux_x86_64": LINUX_LINKOPTS,
 	}),
     deps = [":glfw_src"],
     strip_include_prefix = "glfw/include",
@@ -156,16 +147,12 @@ cc_library(
 cc_library(
     name = "glm",
     srcs = glob([
-        "glm/*.hpp",
         "glm/**/*.hpp",
+        "glm/**/*.h",
+        #"glm/**/*.inl",
     ]),
-    hdrs = glob([
-        "glm/glm/*.hpp",
-        "glm/glm/**/*.hpp",
-    ]),
-    includes = ["glm"],
-    strip_include_prefix = "",
-    textual_hdrs = glob(["glm/**/*.inl"]),
+    hdrs = ["glm/glm.hpp"],
+    includes = ["glm/", "./"],
     visibility = ["//visibility:public"],
 )
 
@@ -175,27 +162,12 @@ cc_library(
 
 cc_library(
     name = "imgui",
-    srcs = [
-        "imgui/imgui.cpp",
-        "imgui/imgui.h",
-        "imgui/imgui_demo.cpp",
-        "imgui/imgui_draw.cpp",
-        "imgui/imgui_widgets.cpp",
-        "imgui/imgui_internal.h",
-
-        "imgui/examples/imgui_impl_glfw.h",
-        "imgui/examples/imgui_impl_glfw.cpp",
-        "imgui/examples/imgui_impl_opengl3.h",
-        "imgui/examples/imgui_impl_opengl3.cpp",
-
-        "imgui/imstb_textedit.h",
-        "imgui/imstb_rectpack.h",
-        "imgui/imstb_truetype.h",
-        ],
+    srcs = glob([
+        "imgui/*.cpp",
+        "imgui/*.h",
+    ]),
     hdrs = ["imgui/imgui.h"],
-    includes = [
-        "imgui/",
-        "imgui/examples/"],
+    includes = ["imgui/"],
     deps = [
         ":glad",
         ":glfw",
@@ -210,7 +182,6 @@ cc_library(
 cc_library(
     name = "imnodes",
     srcs = [
-        "imnodes/imnodes.h",
         "imnodes/imnodes.cpp",
     ],
     hdrs = ["imnodes/imnodes.h"],
@@ -225,10 +196,8 @@ cc_library(
 
 cc_library(
     name = "nlohmann_json",
-    srcs = ["json/json.hpp"],
     hdrs = ["json/json.hpp"],
-    includes = ["json/"],
-    strip_include_prefix = "",
+    includes = ["json"],
     visibility = ["//visibility:public"],
 )
 
@@ -243,7 +212,7 @@ cc_library(
     ]),
     hdrs = glob([
         "spdlog/include/**/*.h",
-        ]),
+    ]),
     includes = ["spdlog/include/"],
     defines=[
       "SPDLOG_COMPILED_LIB"
