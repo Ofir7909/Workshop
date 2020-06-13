@@ -52,7 +52,7 @@ void ViewportWindow::Draw()
 	// Bind defualt framebuffer.
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	ImGui::Image((void*)m_TextureColorBuffer, windowSize);
+	ImGui::Image((void*)m_TextureColorBuffer, windowSize, ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::End();
 }
