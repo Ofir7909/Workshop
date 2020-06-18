@@ -37,8 +37,7 @@ ViewportWindow::ViewportWindow()
 void ViewportWindow::Draw()
 {
 	ImGui::Begin("Viewport");
-	auto windowSize = ImGui::GetContentRegionMax();
-	windowSize.y -= 30; // Try to find a better solution
+	auto windowSize = ImGui::GetContentRegionAvail();
 
 	// Resize the framebuffer and viewport to fit the window
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
