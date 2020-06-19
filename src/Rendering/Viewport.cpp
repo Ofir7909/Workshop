@@ -32,19 +32,12 @@ Viewport::Viewport()
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
+	// Vertex Buffer
+	BufferLayout layout = {{ShaderDataType::Float3, "aPosition"}, {ShaderDataType::Float3, "aColor"}};
+	m_VertexBuffer		= std::make_unique<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]), layout);
+
 	// Index Buffer
 	m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, indicies.size());
-
-	// Vertex Buffer
-	m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]));
-
-	// vertex attributes
-	// Position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// Color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0); // Always unbind first
 	IndexBuffer::Unbind();
