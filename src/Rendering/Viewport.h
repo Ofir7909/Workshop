@@ -4,6 +4,7 @@
 
 #include "Buffer.h"
 #include "Shader.h"
+#include "VertexArray.h"
 
 namespace workshop
 {
@@ -14,8 +15,9 @@ class Viewport
 	void Draw();
 
   private:
-	std::unique_ptr<Shader> m_Shader;
-	std::unique_ptr<VertexBuffer> m_VertexBuffer;
-	std::unique_ptr<IndexBuffer> m_IndexBuffer;
+	std::shared_ptr<Shader> m_Shader;
+	std::shared_ptr<VertexBuffer> m_VertexBuffer;
+	std::shared_ptr<IndexBuffer> m_IndexBuffer;
+	std::shared_ptr<VertexArray> m_VertexArray;
 };
 } // namespace workshop

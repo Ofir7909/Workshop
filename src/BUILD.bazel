@@ -34,6 +34,7 @@ cc_binary(
         "Rendering/Vertex.h",
         "Rendering/Buffer.h",
         "Rendering/Buffer.cpp",
+        "Rendering/VertexArray.h",
         ],
     deps = [
         "//thirdparty:glfw",

@@ -6,9 +6,6 @@
 
 namespace workshop
 {
-unsigned int fbo;
-unsigned int VAO;
-
 Viewport::Viewport()
 {
 	// clang-format off
@@ -26,20 +23,16 @@ Viewport::Viewport()
 	// clang-format on
 
 	// Shader
-	m_Shader = std::make_unique<Shader>("res/Shaders/basic.shader");
-
-	// Vertex Array
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	m_Shader = std::make_shared<Shader>("res/Shaders/basic.shader");
 
 	// Vertex Buffer
 	BufferLayout layout = {{ShaderDataType::Float3, "aPosition"}, {ShaderDataType::Float3, "aColor"}};
-	m_VertexBuffer		= std::make_unique<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]), layout);
+	m_VertexBuffer		= std::make_shared<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]), layout);
 
-	// Index Buffer
-	m_IndexBuffer = std::make_unique<IndexBuffer>(indicies, indicies.size());
+	m_IndexBuffer = std::make_shared<IndexBuffer>(indicies, indicies.size());
 
-	glBindVertexArray(0); // Always unbind first
+	m_VertexArray = std::make_shared<VertexArray>(m_VertexBuffer, m_IndexBuffer);
+
 	IndexBuffer::Unbind();
 	VertexBuffer::Unbind();
 	Shader::Unbind();
@@ -52,11 +45,10 @@ void Viewport::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Bind all objects.
-	glBindVertexArray(VAO);
+	m_VertexArray->Bind();
 	m_Shader->Bind();
 
 	// Render
-	// glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 } // namespace workshop

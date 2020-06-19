@@ -49,11 +49,11 @@ void VertexBuffer::Unbind()
 }
 
 // IndexBuffer
-IndexBuffer::IndexBuffer(const std::vector<unsigned int>& indices, unsigned int count)
+IndexBuffer::IndexBuffer(const std::vector<unsigned int>& indices, unsigned int count): m_Count(count)
 {
 	glGenBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Count * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()
