@@ -1,7 +1,7 @@
 #include "Viewport.h"
 
-#include <glad/glad.h>
-
+#include "RenderCommand.h"
+#include "Renderer.h"
 #include "Vertex.h"
 
 namespace workshop
@@ -41,14 +41,14 @@ Viewport::Viewport()
 void Viewport::Draw()
 {
 	// Clear the screen
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	RenderCommand::SetClearColor({0.2f, 0.2f, 0.2f, 1.0f});
+	RenderCommand::Clear();
 
-	// Bind all objects.
-	m_VertexArray->Bind();
+	Renderer::BeginScene();
 	m_Shader->Bind();
 
-	// Render
-	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+	Renderer::Submit(m_VertexArray);
+
+	Renderer::EndScene();
 }
 } // namespace workshop

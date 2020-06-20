@@ -75,7 +75,9 @@
         "random": "cpp",
         "regex": "cpp",
         "thread": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "complex": "cpp",
+        "typeindex": "cpp"
     },
     "files.exclude": {
         "bazel-*/": true,

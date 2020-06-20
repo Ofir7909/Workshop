@@ -15,17 +15,60 @@ namespace workshop
 // glfw error callback
 void GLFWErrorCallback(int error, const char* description)
 {
-	fprintf(stderr, "[!] GLFWError: %s\n", description);
+	WORKSHOP_ERROR("GLFW Error: {}", description);
 }
 
 void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
 									const GLchar* message, const void* userParam)
 {
+	// clang-format off
+	static std::map<GLenum, std::string> glToString = {	
+		// Source (source)
+		{GL_DEBUG_SOURCE_API, "API"},
+		{GL_DEBUG_SOURCE_WINDOW_SYSTEM, "Window System"},
+		{GL_DEBUG_SOURCE_SHADER_COMPILER, "Shader Compiler"},
+		{GL_DEBUG_SOURCE_THIRD_PARTY, "Third Party"},
+		{GL_DEBUG_SOURCE_APPLICATION, "Application"},
+		{GL_DEBUG_SOURCE_OTHER, "Other"},
+		
+		// Type (type)
+		{GL_DEBUG_TYPE_ERROR, "Error"},
+		{GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR, "Deprecated Behavior"},
+		{GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR, "Undefined Behavior"},
+		{GL_DEBUG_TYPE_PORTABILITY, "Portability"},
+		{GL_DEBUG_TYPE_PERFORMANCE, "Performance"},
+		{GL_DEBUG_TYPE_OTHER, "Other"},
+		{GL_DEBUG_TYPE_MARKER, "Marker"},
+		{GL_DEBUG_TYPE_PUSH_GROUP, "Push Group"},
+		{GL_DEBUG_TYPE_POP_GROUP, "Pop Group"},
+		
+		// Error Codes (id)
+		{GL_NO_ERROR, "No Error"},
+		{GL_INVALID_ENUM, "Invalid Enum"},
+		{GL_INVALID_VALUE, "Invalid Value"},
+		{GL_INVALID_OPERATION, "Invalid Operation"},
+		{GL_STACK_OVERFLOW, "Stack Overflow"},
+		{GL_STACK_UNDERFLOW, "Stack Underflow"},
+		{GL_OUT_OF_MEMORY, "Out Of Memory"},
+
+		// Severity (severity)
+		{GL_DEBUG_SEVERITY_HIGH, "HIGH"},
+		{GL_DEBUG_SEVERITY_MEDIUM, "MEDIUM"},
+ 		{GL_DEBUG_SEVERITY_LOW, "LOW"},
+		{GL_DEBUG_SEVERITY_NOTIFICATION, "Notification"},		
+	};
+	// clang-format on
+
 	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
 		return;
 
-	fprintf(stderr, "[!] OpenGL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type, severity, message);
+	if (type == GL_DEBUG_TYPE_ERROR) {
+		WORKSHOP_WARN("***OPENGL ERROR*** {0}\nSource: {1}\nType: {2}\nSeverity: {3}\n{4}", glToString[id],
+					  glToString[source], glToString[type], glToString[severity], message);
+		return;
+	}
+	WORKSHOP_WARN("OpenGL CALLBACK: {0}\nSource: {1}\nType: {2}\nSeverity: {3}\n{4}", glToString[id],
+				  glToString[source], glToString[type], glToString[severity], message);
 }
 
 Application::Application(char* name)
