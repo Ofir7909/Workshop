@@ -92,7 +92,7 @@ Application::Application(char* name)
 	WORKSHOP_INFO("Created a new window({0} x {1})", WIDTH, HEIGHT);
 
 	glfwMakeContextCurrent(m_Window);
-	glfwSwapInterval(1); // Enable Vsync
+	glfwSwapInterval(0); // Disable Vsync
 
 	// Init GLAD
 	int glad_err_code = gladLoadGL();
