@@ -25,14 +25,18 @@ Viewport::Viewport()
 	// Shader
 	m_Shader = std::make_shared<Shader>("res/Shaders/basic.shader");
 
+	m_VertexArray = std::make_shared<VertexArray>();
+
 	// Vertex Buffer
 	BufferLayout layout = {{ShaderDataType::Float3, "aPosition"}, {ShaderDataType::Float3, "aColor"}};
 	m_VertexBuffer		= std::make_shared<VertexBuffer>(vertices, vertices.size() * sizeof(vertices[0]), layout);
 
 	m_IndexBuffer = std::make_shared<IndexBuffer>(indicies, indicies.size());
 
-	m_VertexArray = std::make_shared<VertexArray>(m_VertexBuffer, m_IndexBuffer);
+	m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+	m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
+	VertexArray::Unbind();
 	IndexBuffer::Unbind();
 	VertexBuffer::Unbind();
 	Shader::Unbind();

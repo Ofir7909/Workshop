@@ -119,7 +119,6 @@ class BufferLayout
 class VertexBuffer
 {
   public:
-	VertexBuffer() {}
 	VertexBuffer(const std::vector<Vertex>& vertices, unsigned int size, const BufferLayout& layout);
 	~VertexBuffer();
 

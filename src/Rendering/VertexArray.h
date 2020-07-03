@@ -9,28 +9,21 @@ namespace workshop
 class VertexArray
 {
   public:
-	VertexArray(const std::shared_ptr<VertexBuffer>& vertexBuffer, const std::shared_ptr<IndexBuffer>& indexBuffer):
-		m_VertexBuffer(vertexBuffer), m_IndexBuffer(indexBuffer)
-	{
-		glGenVertexArrays(1, &m_RendererID);
-		glBindVertexArray(m_RendererID);
-
-		m_VertexBuffer->Bind();
-		m_IndexBuffer->Bind();
-
-		glBindVertexArray(0);
-	}
+	VertexArray();
 	~VertexArray() {}
 
-	void Bind() const { glBindVertexArray(m_RendererID); }
-	static void Unbind() { glBindVertexArray(0); }
+	void Bind() const;
+	static void Unbind();
 
-	const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const { return m_VertexBuffer; }
+	void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
+	void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
+
+	const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; }
 	const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; }
 
   private:
 	unsigned int m_RendererID;
-	std::shared_ptr<VertexBuffer> m_VertexBuffer;
+	std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
 	std::shared_ptr<IndexBuffer> m_IndexBuffer;
 };
 } // namespace workshop

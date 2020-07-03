@@ -32,16 +32,6 @@ VertexBuffer::~VertexBuffer()
 void VertexBuffer::Bind() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-
-	// Attributes
-	int index = 0;
-	for (const auto& element : m_Layout.GetElements()) {
-		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(index, element.GetComponentCount(), element.GetComponentBaseType(), element.Normalized,
-							  m_Layout.GetStride(), (const void*)element.Offset);
-
-		index++;
-	}
 }
 void VertexBuffer::Unbind()
 {
