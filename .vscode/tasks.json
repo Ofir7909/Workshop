@@ -9,8 +9,8 @@
 			"command": "bazel.exe",
 			"args": [
 				"build",
-				"//src:workshop",
-				"--verbose_failures"
+				"//src:workshop"
+				//"--verbose_failures"
 			],
 			"problemMatcher": [],
 			"group": {

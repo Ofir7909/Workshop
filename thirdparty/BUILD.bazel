@@ -201,5 +201,8 @@ cc_library(
         exclude = ["pybind/include/pybind11/common.h"],
     ),
     includes = ["pybind/include/"],
+    deps = select({
+		"@bazel_tools//src/conditions:windows": ["@python_win//:python38-lib"],
+		"@bazel_tools//src/conditions:linux_x86_64": ["@python_linux//:python38-lib"]}),
     visibility = ["//visibility:public"],
 )

@@ -1,0 +1,27 @@
+new_local_repository(
+    name = "python_linux",
+    path = "/usr/lib/",
+    build_file_content = """
+cc_library(
+    name = "python38-lib",
+    srcs = ["python3.8/config-3.8m-x86_64-linux-gnu/libpython3.8.so"],
+    hdrs = glob(["include/python3.8/*.h"]),
+    includes = ["include/python3.8"],
+    visibility = ["//visibility:public"]
+)
+    """
+)
+
+new_local_repository(
+    name = "python_win",
+    path = "C:/Python",
+    build_file_content = """
+cc_library(
+    name = "python38-lib",
+    srcs = ["Python38/libs/python38.lib"],
+    hdrs = glob(["Python38/include/*.h"]),
+    includes = ["Python38/include/"],
+    visibility = ["//visibility:public"]
+)
+    """
+)

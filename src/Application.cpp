@@ -6,9 +6,9 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include <UI/DockspaceWindow.h>
-#include <UI/NodeEditorWindow.h>
-#include <UI/ViewportWindow.h>
+#include "UI/DockspaceWindow.h"
+#include "UI/NodeEditorWindow.h"
+#include "UI/ViewportWindow.h"
 
 namespace workshop
 {
@@ -134,6 +134,8 @@ Application::~Application()
 {
 	// We need to delete it early because it call glfw functions
 	m_UIManager.reset();
+
+	// PythonNode::StopPython();
 
 	// clean glfw
 	glfwDestroyWindow(m_Window);

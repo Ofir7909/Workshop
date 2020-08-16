@@ -77,7 +77,9 @@
         "thread": "cpp",
         "variant": "cpp",
         "complex": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "any": "cpp",
+        "filesystem": "cpp"
     },
     "files.exclude": {
         "bazel-*/": true,
