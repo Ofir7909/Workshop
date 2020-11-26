@@ -11,6 +11,7 @@ class ViewportWindow : public UIWindow
 {
   public:
 	ViewportWindow();
+	~ViewportWindow() = default;
 	virtual void Draw() override;
 
   private:

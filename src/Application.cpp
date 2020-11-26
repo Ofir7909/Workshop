@@ -22,7 +22,7 @@ void GLAPIENTRY OpenGLErrorCallback(GLenum source, GLenum type, GLuint id, GLenu
 									const GLchar* message, const void* userParam)
 {
 	// clang-format off
-	static std::map<GLenum, std::string> glToString = {	
+	static std::unordered_map<GLenum, std::string> glToString = {	
 		// Source (source)
 		{GL_DEBUG_SOURCE_API, "API"},
 		{GL_DEBUG_SOURCE_WINDOW_SYSTEM, "Window System"},
@@ -134,8 +134,6 @@ Application::~Application()
 {
 	// We need to delete it early because it call glfw functions
 	m_UIManager.reset();
-
-	// PythonNode::StopPython();
 
 	// clean glfw
 	glfwDestroyWindow(m_Window);

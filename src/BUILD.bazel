@@ -18,20 +18,6 @@ cc_binary(
         "UI/ViewportWindow.h",
         "UI/ViewportWindow.cpp",
 
-        "Nodes/NodeGraph.h",
-        "Nodes/NodeGraph.cpp",
-        "Nodes/GraphEntity.h",
-        "Nodes/GraphEntity.cpp",
-        "Nodes/Node.h",
-        "Nodes/Socket.h",
-        #"Nodes/NodeManager.h",
-        #"Nodes/NodeManager.cpp",
-        #"Nodes/NodeLink.h",
-        #"Nodes/NodeLink.cpp",
-
-        #"Nodes/PythonNode.h",
-        #"Nodes/PythonNode.cpp",
-
         "Rendering/Viewport.h",
         "Rendering/Viewport.cpp",
         "Rendering/Shader.h",
