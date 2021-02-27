@@ -17,15 +17,14 @@ ViewportWindow::ViewportWindow()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
 	// Render buffer object
-	// glGenRenderbuffers(1, &m_RenderBuffer);
-	// glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
-	// glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+	glGenRenderbuffers(1, &m_RenderBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
 
 	// Bind The ColorBuffer and RenderBuffer to the framebuffer.
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_Framebuffer);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureColorBuffer, 0);
-	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
-	// GL_RENDERBUFFER, m_RenderBuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer);
 
 	// Check that the framebuffer is good to go.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -42,8 +41,7 @@ void ViewportWindow::Draw()
 	// Resize the framebuffer and viewport to fit the window
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, windowSize.x, windowSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	// glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowSize.x,
-	// windowSize.y);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowSize.x, windowSize.y);
 	glViewport(0, 0, windowSize.x, windowSize.y);
 
 	m_Viewport->Draw();

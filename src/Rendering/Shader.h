@@ -13,10 +13,11 @@ class Shader
 	void Bind() const;
 	static void Unbind();
 
-	// void SetUniform4f(const std::string& name, int value);
+	void SetUniformMatrix4f(const std::string& name, const glm::mat4& matrix);
+	void SetUniform4f(const std::string& name, int value);
 
   private:
-	// int GetUniformLocation(const std::string& name);
+	int GetUniformLocation(const std::string& name);
 
 	unsigned int CreateShaderProgram(const std::string& filepath);
 	unsigned int CompileShader(unsigned int type, const std::string& source);

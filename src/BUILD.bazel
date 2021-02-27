@@ -27,6 +27,8 @@ cc_binary(
         "Rendering/Buffer.cpp",
         "Rendering/VertexArray.h",
         "Rendering/VertexArray.cpp",
+        "Rendering/Camera.h",
+        "Rendering/Camera.cpp",
         ],
     deps = [
         "//thirdparty:glfw",

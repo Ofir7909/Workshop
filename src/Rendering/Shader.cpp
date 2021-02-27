@@ -1,6 +1,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace workshop
 {
@@ -22,6 +23,27 @@ void Shader::Bind() const
 void Shader::Unbind()
 {
 	glUseProgram(0);
+}
+
+void Shader::SetUniformMatrix4f(const std::string& name, const glm::mat4& matrix)
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+int Shader::GetUniformLocation(const std::string& name)
+{
+	auto iter = m_UniformLocationCache.find(name);
+
+	if (iter != m_UniformLocationCache.end()) {
+		return iter->second; // return the location stored in cache
+	}
+
+	int location = glGetUniformLocation(m_RendererID, name.c_str());
+	if (location == -1) {
+		WORKSHOP_WARN("Uniform doesn't exist: %s", name);
+	}
+	m_UniformLocationCache[name] = location;
+	return location;
 }
 
 unsigned int Shader::CreateShaderProgram(const std::string& filepath)
