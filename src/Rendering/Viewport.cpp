@@ -60,7 +60,7 @@ Viewport::Viewport()
 	Shader::Unbind();
 }
 
-void Viewport::Draw()
+void Viewport::Draw(float width, float height)
 {
 	glEnable(GL_DEPTH_TEST);
 
@@ -68,14 +68,16 @@ void Viewport::Draw()
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 trans = m_Camera->GetViewMatrix();
-	trans			= glm::translate(trans, glm::vec3(0.0f, 0.0f, 0.0f));
-	trans			= glm::scale(trans, glm::vec3(0.5f));
-	trans			= glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.4f, 0.7f, 1.0f));
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(0.5f));
+	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.4f, 0.7f, 1.0f));
+
+	glm::mat4 mvpMat = m_Camera->GetProjMatrix(width / height) * m_Camera->GetViewMatrix() * model;
 
 	// Draw
 	m_Shader->Bind();
-	m_Shader->SetUniformMatrix4f("uMVP", trans);
+	m_Shader->SetUniformMatrix4f("uMVP", mvpMat);
 
 	m_VertexArray->Bind();
 	glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);

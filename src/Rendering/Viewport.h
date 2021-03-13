@@ -7,14 +7,13 @@
 #include "Shader.h"
 #include "VertexArray.h"
 
-
 namespace workshop
 {
 class Viewport
 {
   public:
 	Viewport();
-	void Draw();
+	void Draw(float width, float height);
 
   private:
 	std::shared_ptr<Camera> m_Camera;

@@ -44,7 +44,7 @@ void ViewportWindow::Draw()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, windowSize.x, windowSize.y);
 	glViewport(0, 0, windowSize.x, windowSize.y);
 
-	m_Viewport->Draw();
+	m_Viewport->Draw(windowSize.x, windowSize.y);
 
 	// Bind defualt framebuffer.
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
