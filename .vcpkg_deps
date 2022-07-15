@@ -1,0 +1,5 @@
+glad
+glfw3
+glm
+imgui[docking-experimental, glfw-binding, opengl3-binding]
+spdlog
