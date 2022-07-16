@@ -12,7 +12,6 @@ void main()
 {
 	vColor = aColor;
 	gl_Position = uCameraMatrix * aPosition;
-	
 }
 
 #shader fragment
@@ -20,11 +19,9 @@ void main()
 
 in vec4 vColor;
 
-uniform vec4 uTint = vec4(1,1,1,1);
-
 out vec4 color;
 
 void main()
 {
-	color = vColor * uTint;
+	color = vColor;
 }

@@ -17,6 +17,8 @@ class Camera
 	virtual ~Camera() = default;
 
 	const glm::mat4& GetProjection() const { return m_ProjectionMatrix; }
+	virtual const glm::mat4& GetView() const = 0;
+	virtual glm::mat4 GetViewProjectionMatrix() const = 0;
 
   protected:
 	glm::mat4 m_ProjectionMatrix;
@@ -25,7 +27,7 @@ class Camera
 class EditorCamera : public Camera
 {
   public:
-	EditorCamera(float fov = 65.0f, float aspect = 1.0f, float near_z = 0.01f, float far_z = 100.0f):
+	EditorCamera(float fov = 65.0f, float aspect = 1.0f, float near_z = 0.1f, float far_z = 100.0f):
 		m_vFov(65.0f), m_AspectRatio(aspect), m_NearClip(near_z), m_FarClip(far_z)
 	{
 		UpdateView();
@@ -96,7 +98,8 @@ class EditorCamera : public Camera
 		UpdateProjection();
 	}
 
-	glm::mat4 GetViewProjectionMatrix() const { return m_ProjectionMatrix * m_ViewMatrix; }
+	const glm::mat4& GetView() const override { return m_ViewMatrix; }
+	glm::mat4 GetViewProjectionMatrix() const override { return m_ProjectionMatrix * m_ViewMatrix; }
 
   private:
 	void CalculatePosition() { m_Position = m_FocalPoint - Forward() * m_Distance; }
@@ -137,7 +140,7 @@ class EditorCamera : public Camera
 
 	glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 	glm::vec3 m_FocalPoint = {0.0f, 0.0f, 0.0f};
-	float m_Distance = 10.0f;
+	float m_Distance = 5.0f;
 	glm::vec3 m_Position; // Position is calculated from focalpoint and distance, should not be set directly.
 
 	float m_Pitch = 0.0f, m_Yaw = 0.0f;
@@ -153,11 +156,12 @@ class TransformCamera : public Camera
 	TransformCamera(Transform transform = Transform(), float vfov = 70.0f): m_Transform(transform), m_vFov(vfov) {}
 	~TransformCamera() {}
 
-	glm::mat4 GetViewProjectionMatrix() { return m_ProjectionMatrix * glm::inverse(m_Transform.GetMatrix()); }
+	const glm::mat4& GetView() const override { return glm::inverse(m_Transform.GetMatrix()); }
+	glm::mat4 GetViewProjectionMatrix() const override { return m_ProjectionMatrix * GetView(); }
 
 	void SetVFov(float vfov) { m_vFov = vfov; }
 
-	void SetPerspective(float aspect, float z_near = 0.01f, float z_far = 100.0f)
+	void SetPerspective(float aspect, float z_near = 0.1f, float z_far = 100.0f)
 	{
 		m_ProjectionMatrix = glm::perspective(glm::radians(m_vFov), aspect, z_near, z_far);
 	}

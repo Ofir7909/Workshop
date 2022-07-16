@@ -47,6 +47,10 @@ Window::Window(const std::string& title, uint32_t width, uint32_t height):
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(OpenGLErrorCallback, 0);
 
+	// Opacity
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
 	glViewport(0, 0, m_Data.Width, m_Data.Height);
 
 	// GLFW Callbacks

@@ -10,6 +10,19 @@
 
 #include "BasePanel.h"
 
+struct ViewportGrid
+{
+	Shader shader = Shader("res/shaders/grid.glsl");
+
+	void Draw(const Camera& camera)
+	{
+		shader.Bind();
+		shader.SetUniformMat4("uCameraMatrix", camera.GetViewProjectionMatrix());
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+};
+
 class ViewportPanel : public BasePanel
 {
   public:
@@ -43,10 +56,9 @@ class ViewportPanel : public BasePanel
 
 		m_Framebuffer.Bind();
 
-		glClearColor(0.36f, 0.41f, 0.45, 1);
-		// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearColor(0.36f, 0.41f, 0.45f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// clang-format off
 		static float vertices[] = {
@@ -101,13 +113,16 @@ class ViewportPanel : public BasePanel
 		// Shader
 		static Shader vertexColorShader("res/shaders/basic.glsl");
 		vertexColorShader.Bind();
-		vertexColorShader.SetUniform4f("uTint", glm::vec4(0.3f, 0.5f, 0.7f, 1));
 
 		// Camera
 		vertexColorShader.SetUniformMat4("uCameraMatrix", m_Camera.GetViewProjectionMatrix());
 
 		// Draw
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+
+		// Grid
+		static ViewportGrid grid;
+		grid.Draw(m_Camera);
 
 		// restore regular framebuffer
 		m_Framebuffer.Unbind();
