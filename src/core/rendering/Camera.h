@@ -80,6 +80,7 @@ class EditorCamera : public Camera
 		}
 	}
 
+	const glm::vec3& GetPosition() const { return m_Position; }
 	glm::quat GetOrientation() const { return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f)); }
 
 	glm::vec3 Up() const { return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f)); }

@@ -24,6 +24,13 @@ class Shader
 	void Bind() const { glUseProgram(m_ID); }
 	static void Unbind() { glUseProgram(0); }
 
+	void SetUniform1f(const std::string& name, float v) { glProgramUniform1f(m_ID, GetUniformLocation(name), v); }
+
+	void SetUniform3f(const std::string& name, const glm::vec3& v)
+	{
+		glProgramUniform3f(m_ID, GetUniformLocation(name), v.x, v.y, v.z);
+	}
+
 	void SetUniform4f(const std::string& name, const glm::vec4& v)
 	{
 		glProgramUniform4f(m_ID, GetUniformLocation(name), v.x, v.y, v.z, v.w);

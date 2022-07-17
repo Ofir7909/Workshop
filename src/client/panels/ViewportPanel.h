@@ -6,6 +6,7 @@
 #include "Core/rendering/Framebuffer.h"
 #include "client/Input.h"
 #include "core/rendering/Camera.h"
+#include "core/rendering/Light.h"
 #include "core/rendering/Renderer.h"
 
 #include "BasePanel.h"
@@ -61,18 +62,22 @@ class ViewportPanel : public BasePanel
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		// clang-format off
+		/*
 		static float vertices[] = {
 			-0.5f, -0.5f, 0.5f,		1.0f, 1.0f, 1.0f,
 			0.5f, -0.5f, 0.5f,		0.0f, 1.0f, 1.0f,
 			0.5f,  0.5f, 0.5f,		1.0f, 0.0f, 1.0f,
 			-0.5f,  0.5f, 0.5f,		1.0f, 1.0f, 0.0f,
 
-			-0.5f, -0.5f, -0.5f,		1.0f, 1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 1.0f,
 			0.5f, -0.5f, -0.5f,		0.0f, 1.0f, 1.0f,
 			0.5f,  0.5f, -0.5f,		1.0f, 0.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f,		1.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 0.0f,
 		};
+		*/
 
+	
+		/*
 		static uint32_t indicies[] = {
 			0, 1, 2,
 			2, 3, 0,
@@ -91,6 +96,60 @@ class ViewportPanel : public BasePanel
 
 			0, 3, 7,
 			7, 4, 0
+		};
+		*/
+
+		static float vertices[] = {
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+			0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f, 
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			0.5f, -0.5f,  0.5f,   0.0f,  0.0f, 1.0f,
+			0.5f,  0.5f,  0.5f,   0.0f,  0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+			0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,
+
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		};
+
+
+		static uint32_t indicies[] = {
+			0, 1, 2,
+			2, 3, 0,
+
+			4, 5, 6,
+			6, 7, 4,
+
+			8, 9, 10,
+			10, 11, 8,
+
+			12, 13, 14,
+			14, 15, 12,
+
+			16, 17, 18,
+			18, 19, 16,
+
+			20, 21, 22,
+			22, 23, 20,
 		};
 		// clang-format on
 
@@ -111,8 +170,19 @@ class ViewportPanel : public BasePanel
 		ibo.Bind();
 
 		// Shader
-		static Shader vertexColorShader("res/shaders/basic.glsl");
+		static Shader vertexColorShader("res/shaders/viewport.glsl");
 		vertexColorShader.Bind();
+		vertexColorShader.SetUniform3f("uSolidColor", glm::vec3 {0.5f});
+		vertexColorShader.SetUniform1f("uShininess", 16);
+
+		// Lights
+		vertexColorShader.SetUniform3f("uViewPos", m_Camera.GetPosition());
+
+		vertexColorShader.SetUniform3f("uDirLight.direction", m_Light.direction);
+		vertexColorShader.SetUniform3f("uDirLight.color", m_Light.color);
+		vertexColorShader.SetUniform3f("uDirLight.specular", m_Light.specular);
+
+		vertexColorShader.SetUniform1f("uAmbientStrength", m_AmbientStrength);
 
 		// Camera
 		vertexColorShader.SetUniformMat4("uCameraMatrix", m_Camera.GetViewProjectionMatrix());
@@ -121,8 +191,7 @@ class ViewportPanel : public BasePanel
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
 		// Grid
-		static ViewportGrid grid;
-		grid.Draw(m_Camera);
+		m_Grid.Draw(m_Camera);
 
 		// restore regular framebuffer
 		m_Framebuffer.Unbind();
@@ -134,4 +203,8 @@ class ViewportPanel : public BasePanel
 	ImVec2 m_Size;
 	Framebuffer m_Framebuffer;
 	EditorCamera m_Camera;
+	ViewportGrid m_Grid;
+
+	DirectionalLight m_Light = DirectionalLight({-0.4f, 0.6f, -0.7f}, glm::vec3 {0.7, 0.2, 0.1}, glm::vec3 {0.7});
+	float m_AmbientStrength = 0.2f;
 };
