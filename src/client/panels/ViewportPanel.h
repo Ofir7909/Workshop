@@ -172,8 +172,10 @@ class ViewportPanel : public BasePanel
 		// Shader
 		static Shader vertexColorShader("res/shaders/viewport.glsl");
 		vertexColorShader.Bind();
-		vertexColorShader.SetUniform3f("uSolidColor", glm::vec3 {0.5f});
-		vertexColorShader.SetUniform1f("uShininess", 16);
+
+		vertexColorShader.SetUniform3f("uMaterial.diffuse", glm::vec3 {0.7f});
+		vertexColorShader.SetUniform3f("uMaterial.specular", glm::vec3 {0.7f});
+		vertexColorShader.SetUniform1f("uMaterial.shininess", 0.3);
 
 		// Lights
 		vertexColorShader.SetUniform3f("uViewPos", m_Camera.GetPosition());
@@ -182,7 +184,7 @@ class ViewportPanel : public BasePanel
 		vertexColorShader.SetUniform3f("uDirLight.color", m_Light.color);
 		vertexColorShader.SetUniform3f("uDirLight.specular", m_Light.specular);
 
-		vertexColorShader.SetUniform1f("uAmbientStrength", m_AmbientStrength);
+		vertexColorShader.SetUniform3f("uAmbientLight", m_AmbientLight);
 
 		// Camera
 		vertexColorShader.SetUniformMat4("uCameraMatrix", m_Camera.GetViewProjectionMatrix());
@@ -196,7 +198,8 @@ class ViewportPanel : public BasePanel
 		// restore regular framebuffer
 		m_Framebuffer.Unbind();
 
-		ImGui::Image(reinterpret_cast<void*>(uint64_t(m_Framebuffer.GetColorAttachment())), newSize);
+		ImGui::Image(reinterpret_cast<void*>(uint64_t(m_Framebuffer.GetColorAttachment())), newSize, ImVec2 {0, 1},
+					 ImVec2 {1, 0});
 	}
 
   private:
@@ -205,6 +208,6 @@ class ViewportPanel : public BasePanel
 	EditorCamera m_Camera;
 	ViewportGrid m_Grid;
 
-	DirectionalLight m_Light = DirectionalLight({-0.4f, 0.6f, -0.7f}, glm::vec3 {0.7, 0.2, 0.1}, glm::vec3 {0.7});
-	float m_AmbientStrength = 0.2f;
+	DirectionalLight m_Light = DirectionalLight({-0.4f, -0.6f, -0.7f}, glm::vec3 {0.7}, glm::vec3 {0.7});
+	glm::vec3 m_AmbientLight = glm::vec3 {0.2f};
 };

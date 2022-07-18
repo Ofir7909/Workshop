@@ -27,8 +27,15 @@ in vec3 vFragPos;
 uniform mat4 uCameraMatrix;
 uniform vec3 uViewPos;
 
-uniform vec3 uSolidColor;
-uniform float uShininess;
+struct Material { 
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+}; 
+  
+uniform Material uMaterial;
+
+vec3 uAmbientLight;
 
 struct DirLight {
     vec3 direction;
@@ -37,26 +44,22 @@ struct DirLight {
 };  
 uniform DirLight uDirLight;
 
-uniform float uAmbientStrength;
-
 out vec4 color;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
-	vec3 lightDir = normalize(light.direction);
+	vec3 lightDir = normalize(-light.direction);
 
-	vec3 ambient = uDirLight.color * uAmbientStrength;
-
-	float diffImpact = max(dot(-vNormal, lightDir), 0);
+	float diffImpact = max(dot(vNormal, lightDir), 0);
 	vec3 diffuse = uDirLight.color * diffImpact;
 
-	vec3 reflectDir = reflect(lightDir, normal);
-	float spec = pow(max(dot(reflectDir, -viewDir), 0), uShininess);
+	vec3 reflectDir = reflect(-lightDir, normal);
+	float spec = pow(max(dot(reflectDir, -viewDir), 0), uMaterial.shininess * 128);
 
-	return ambient + diffuse + spec;
+	return diffuse + spec;
 }
 
 void main()
 {
 	vec3 viewDir = normalize(vFragPos - uViewPos);
-	color = vec4(CalcDirLight(uDirLight, vNormal, viewDir) * uSolidColor, 1.0);
+	color = vec4((CalcDirLight(uDirLight, vNormal, viewDir) + uAmbientLight) * uMaterial.diffuse, 1.0);
 }

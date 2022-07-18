@@ -49,7 +49,7 @@ class EditorCamera : public Camera
 		auto mouseDelta = mousePosNew - mousePosPrev;
 		mousePosPrev = mousePosNew;
 
-		// ly Cam Navigation(Right mouse button)
+		// fly Cam Navigation(Right mouse button)
 		if (Input::IsMouseButtonPressed(1)) {
 			MouseRotate(mouseDelta * Time::deltaTime);
 			m_FocalPoint = m_Position + Forward() * m_Distance;
@@ -61,7 +61,8 @@ class EditorCamera : public Camera
 			float vInput = Input::GetAxis(GLFW_KEY_Q, GLFW_KEY_E);
 
 			m_FocalPoint += dir * m_FlySpeed * Time::deltaTime;
-			m_FocalPoint -= glm::vec3(0, 1.0f, 0) * vInput * m_FlySpeed * Time::deltaTime;
+			m_FocalPoint += glm::vec3(0, 1.0f, 0) * vInput * m_FlySpeed * Time::deltaTime;
+			return;
 		}
 
 		// Middle Mouse Navigation
@@ -124,13 +125,13 @@ class EditorCamera : public Camera
 	void MousePan(const glm::vec2& delta)
 	{
 		m_FocalPoint += -Right() * delta.x * m_PanSpeed * m_Distance;
-		m_FocalPoint += -Up() * delta.y * m_PanSpeed * m_Distance;
+		m_FocalPoint += Up() * delta.y * m_PanSpeed * m_Distance;
 	}
 	void MouseRotate(const glm::vec2& delta)
 	{
 		auto yaw_sign = this->Up().y > 0.0f ? 1.0f : -1.0f;
 		m_Yaw += yaw_sign * delta.x * m_RotationSpeed;
-		m_Pitch -= delta.y * m_RotationSpeed;
+		m_Pitch += delta.y * m_RotationSpeed;
 	}
 
   private:
