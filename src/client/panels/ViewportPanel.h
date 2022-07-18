@@ -180,9 +180,12 @@ class ViewportPanel : public BasePanel
 		// Lights
 		vertexColorShader.SetUniform3f("uViewPos", m_Camera.GetPosition());
 
-		vertexColorShader.SetUniform3f("uDirLight.direction", m_Light.direction);
-		vertexColorShader.SetUniform3f("uDirLight.color", m_Light.color);
-		vertexColorShader.SetUniform3f("uDirLight.specular", m_Light.specular);
+		for (size_t i = 0; i < m_Lights.size(); i++) {
+			auto dir = glm::rotate(m_Camera.GetOrientation(), -m_Lights[i].direction);
+			vertexColorShader.SetUniform3f(std::format("uDirLights[{}].direction", i), dir);
+			vertexColorShader.SetUniform3f(std::format("uDirLights[{}].color", i), m_Lights[i].color);
+			vertexColorShader.SetUniform3f(std::format("uDirLights[{}].specular", i), m_Lights[i].specular);
+		}
 
 		vertexColorShader.SetUniform3f("uAmbientLight", m_AmbientLight);
 
@@ -208,6 +211,14 @@ class ViewportPanel : public BasePanel
 	EditorCamera m_Camera;
 	ViewportGrid m_Grid;
 
-	DirectionalLight m_Light = DirectionalLight({-0.4f, -0.6f, -0.7f}, glm::vec3 {0.7}, glm::vec3 {0.7});
+	// clang-format off
+	std::vector<DirectionalLight> m_Lights = {
+		DirectionalLight({0.0f, 0.639175f, 0.769061f}, {0.507074f, 0.507074f, 0.507074f}, {0.666141f, 0.666141f , 0.666141f}),
+		DirectionalLight({-0.846939f, -0.357143f, 0.393883f}, {0.021936f, 0.058160f, 0.063719f}, {0.033668f, 0.060061f , 0.063712f}),
+		DirectionalLight({0.755102f, -0.530612f, 0.385060f}, {0.063721f, 0.040061f, 0.037017f}, {0.069396f, 0.046455f , 0.046455f}),
+		DirectionalLight({0.034483f, 0.913793f, 0.404714f}, {0.000000f, 0.000000f, 0.000000f}, {0.023079f, 0.023393f , 0.025394f})
+	};
+	// clang-format on
+
 	glm::vec3 m_AmbientLight = glm::vec3 {0.2f};
 };

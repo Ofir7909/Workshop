@@ -32,17 +32,17 @@ struct Material {
     vec3 specular;
     float shininess;
 }; 
-  
 uniform Material uMaterial;
-
-vec3 uAmbientLight;
 
 struct DirLight {
     vec3 direction;
     vec3 color;
     vec3 specular;
-};  
-uniform DirLight uDirLight;
+};
+#define NR_POINT_LIGHTS 4  
+uniform DirLight uDirLights[NR_POINT_LIGHTS];
+
+uniform vec3 uAmbientLight;
 
 out vec4 color;
 
@@ -50,16 +50,25 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir){
 	vec3 lightDir = normalize(-light.direction);
 
 	float diffImpact = max(dot(vNormal, lightDir), 0);
-	vec3 diffuse = uDirLight.color * diffImpact;
+	vec3 diffuse = light.color * diffImpact * uMaterial.diffuse;
 
 	vec3 reflectDir = reflect(-lightDir, normal);
-	float spec = pow(max(dot(reflectDir, -viewDir), 0), uMaterial.shininess * 128);
+	float specImpact = pow(max(dot(reflectDir, -viewDir), 0), uMaterial.shininess * 128);
+	vec3 spec = light.specular * specImpact * uMaterial.specular;
 
 	return diffuse + spec;
 }
 
 void main()
 {
+	vec3 lights = vec3(0);
+
+	vec3 ambient = uAmbientLight * uMaterial.diffuse;
+	lights += ambient;
+
 	vec3 viewDir = normalize(vFragPos - uViewPos);
-	color = vec4((CalcDirLight(uDirLight, vNormal, viewDir) + uAmbientLight) * uMaterial.diffuse, 1.0);
+	for(int i = 0; i < NR_POINT_LIGHTS; i++)
+		lights += CalcDirLight(uDirLights[i], vNormal, viewDir);
+
+	color = vec4(lights, 1.0);
 }
