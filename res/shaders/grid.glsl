@@ -5,6 +5,7 @@
 
 uniform mat4 uCameraMatrix;
 
+//XY Plane [-1,-1,0] to [1,1,0]
 const vec3 gridPlane[6] = vec3[6](
 	vec3(1,1,0), vec3(-1,-1,0), vec3(-1,1,0), 
 	vec3(-1,-1,0), vec3(1,1,0), vec3(1,-1,0)
@@ -34,6 +35,10 @@ void main()
 #version 330 core
 
 uniform mat4 uCameraMatrix;
+uniform vec3 uViewPos;
+
+uniform float uGridOpacity = 0.5f;
+uniform float uGridFalloff = 1.0f;
 
 in vec3 vNearPoint;
 in vec3 vFarPoint;
@@ -48,7 +53,7 @@ vec4 grid(vec3 fragPos3D, float scale, bool drawAxis) {
     float line = min(grid.x, grid.y);
     float minimumz = min(derivative.y, 1);
     float minimumx = min(derivative.x, 1);
-    vec4 color = vec4(0.2, 0.2, 0.2, 1.0 - min(line, 1.0));
+    vec4 color = vec4(0.2, 0.2, 0.2, uGridOpacity - min(line, 1.0));
     // z axis
     if(fragPos3D.x > -0.1 * minimumx && fragPos3D.x < 0.1 * minimumx)
         color.z = 1.0;
@@ -65,23 +70,21 @@ float computeDepth(vec3 pos) {
 	return 0.5 * (clip_space_depth + 1); //convert from (-1)-1 to 0-1 
 }
 
-//Returns depth between -1 to 1
-float computeLinearDepth(vec3 pos) {
-	vec4 clip_space_pos = uCameraMatrix * vec4(pos.xyz, 1.0);
-    float clip_space_depth = (clip_space_pos.z / clip_space_pos.w);
-	return clip_space_depth;
+float fadingFalloff(float fade){
+    return min(max(fade*fade -uGridFalloff,0),1);
 }
 
 void main()
 {
-	float t = -vNearPoint.y / (vFarPoint.y - vNearPoint.y);
+	float t = -vNearPoint.y / (vFarPoint.y - vNearPoint.y); //Find Intersection with y=0
 	vec3 fragPos3D = vNearPoint + t * (vFarPoint - vNearPoint);
 
 	float depth = computeDepth(fragPos3D);
 	gl_FragDepth = depth;
 
-    //float fading = clamp(0.5/(depth-0.3) - 0.5, 0, 1);
+    vec3 viewDir = normalize(fragPos3D - uViewPos);
+    float fading = abs(dot(viewDir, vec3(0,1,0))); //UP Vector
 
 	color = grid(fragPos3D, 10, true) * float(t > 0);
-	//color.a *= fading;
+	color.a *= fadingFalloff(fading);
 }

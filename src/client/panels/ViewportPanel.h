@@ -15,10 +15,14 @@ struct ViewportGrid
 {
 	Shader shader = Shader("res/shaders/grid.glsl");
 
-	void Draw(const Camera& camera)
+	void Draw(const EditorCamera& camera)
 	{
 		shader.Bind();
 		shader.SetUniformMat4("uCameraMatrix", camera.GetViewProjectionMatrix());
+		shader.SetUniform3f("uViewPos", camera.GetPosition());
+
+		shader.SetUniform1f("uGridOpacity", 1.5f);
+		shader.SetUniform1f("uGridFalloff", 0.0f);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
